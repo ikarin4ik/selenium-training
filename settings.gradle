@@ -1,0 +1,3 @@
+rootProject.name = 'selenium-training'
+include 'java-example'
+
