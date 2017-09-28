@@ -1,17 +1,21 @@
 package ru.stqa;
 
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class litecartLoginTest {
+import java.util.List;
+
+public class LitecartStickerTest {
     private WebDriver driver;
     private WebDriverWait wait;
+
 
     @Before
     public void start() {
@@ -20,11 +24,14 @@ public class litecartLoginTest {
     }
 
     @Test
-    public void Login () {
-        driver.get("http://localhost/litecart/admin/");
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
+    public void checkStickers () {
+        driver.get("http://localhost/litecart/");
+
+        List<WebElement> elements = driver.findElements(By.cssSelector("li.product"));
+        for (int i = 0; i < elements.size(); i++) {
+            Assert.assertTrue(elements.get(i).findElements(By.cssSelector("div.sticker")).size() == 1);
+        }
+
     }
 
     @After
@@ -32,4 +39,6 @@ public class litecartLoginTest {
         driver.quit();
         driver = null;
     }
+
 }
+
