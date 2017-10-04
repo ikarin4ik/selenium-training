@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class LiteCartPageOfGoods {
 
 
+
     @Test
     public void testFirefox(){
         FirefoxDriver driver = new FirefoxDriver();
@@ -40,7 +41,7 @@ public class LiteCartPageOfGoods {
     }
 
 
-    public void campaignsAssert(WebDriver driver) {
+    private void campaignsAssert(WebDriver driver) {
         driver.get("http://localhost/litecart/");
 
         WebElement product = driver.findElement(By.cssSelector("div.content div#box-campaigns div.content ul.listing-wrapper li.product"));
@@ -50,6 +51,9 @@ public class LiteCartPageOfGoods {
         WebElement normalPrice = product.findElement(By.cssSelector("a.link div s.regular-price"));
         String assertNormalPrice = normalPrice.getText();
         String assertColorNormalPrice = normalPrice.getCssValue("color");
+
+
+
         String assertFontSizeNormalPrice = normalPrice.getCssValue("font-size");
         String assertStrikeNormalPrice = normalPrice.getTagName();
 
@@ -92,13 +96,33 @@ public class LiteCartPageOfGoods {
 
         // обычная цена серая на главной странице и странице продукта
 
-        Assert.assertEquals(extractRGB(assertColorNormalPrice), ("rgb(119, 119, 119)"));
-        Assert.assertEquals(extractRGB(aasertColorNormalPricePageProduct), ("rgb(102, 102, 102)"));
+        String[] rgb = extractRGB(assertColorNormalPrice);
+
+        Assert.assertEquals(rgb[0].trim(), rgb[1].trim());
+        Assert.assertEquals(rgb[1].trim(), rgb[2].trim());
+
+        rgb = extractRGB(aasertColorNormalPricePageProduct);
+
+        Assert.assertEquals(rgb[0].trim(), rgb[1].trim());
+        Assert.assertEquals(rgb[1].trim(), rgb[2].trim());
+
 
         // акционная цена красная на главной странице и странице продукта
 
-        Assert.assertEquals(extractRGB(assertColorStockPrice), ("rgb(204, 0, 0)"));
-        Assert.assertEquals(extractRGB(assertColorStockPricePageProduct), ("rgb(204, 0, 0)"));
+        rgb = extractRGB(assertColorStockPrice);
+
+        Assert.assertEquals(rgb[1].trim(), "0");
+        Assert.assertEquals(rgb[2].trim(), "0");
+        Assert.assertNotEquals(rgb[0].trim(), "0");
+
+        rgb = extractRGB(assertColorStockPricePageProduct);
+
+        Assert.assertEquals(rgb[1].trim(), "0");
+        Assert.assertEquals(rgb[2].trim(), "0");
+        Assert.assertNotEquals(rgb[0].trim(), "0");
+
+        // Assert.assertEquals(extractRGB(assertColorStockPrice), ("rgb(204, 0, 0)"));
+        // Assert.assertEquals(extractRGB(assertColorStockPricePageProduct), ("rgb(204, 0, 0)"));
 
         // обычная цена на главной странице и странице продукта зачеркнутая
         // акционная цена главной странице и странице продукта жирная
@@ -115,11 +139,11 @@ public class LiteCartPageOfGoods {
         Assert.assertTrue(Double.parseDouble(assertFontSizeNormalPricePageProduct.replace("px","")) < Double.parseDouble(assertFontSizeStockPricePageProduct.replace("px","")));
     }
 
-    private String extractRGB(String rgbString) {
+    private String[] extractRGB(String rgbString) {
         if(rgbString.startsWith("rgba")) {
-            return "rgb" + rgbString.subSequence(4,rgbString.length() - 4) + ")";
-        } else
-            return rgbString;
+            return rgbString.substring(5,rgbString.length() - 1).split(",");
+        }
+        return rgbString.substring(4,rgbString.length() - 1).split(",");
     }
 
 }
