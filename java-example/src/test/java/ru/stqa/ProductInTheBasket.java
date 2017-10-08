@@ -78,7 +78,7 @@ public class ProductInTheBasket {
             }
             rows = driver.findElements(By.cssSelector(rowsSelector));
         }
-        // строки таблицы
+
     }
 
     @After
