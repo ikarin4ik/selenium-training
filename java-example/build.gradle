@@ -13,4 +13,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile 'org.seleniumhq.selenium:selenium-java:3.5.3'
 
+    compile ('net.lightbody.bmp:browsermob-core:2.1.5') {
+        exclude module: 'selenium'
+    }
+
 }
